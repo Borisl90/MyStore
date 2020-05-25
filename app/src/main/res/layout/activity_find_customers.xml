@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation         = "vertical"
+    tools:context=".FindCustomers">
+
+
+    <TextView
+        android:id="@+id/textViewFLName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First Name Or Last Name:"
+        android:textColor="#110"
+        android:textSize="12sp" />
+
+
+    <AutoCompleteTextView
+        android:id="@+id/etfName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Israel"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textColor="#110"
+        android:textSize="12sp"
+        android:windowSoftInputMode="stateHidden|adjustResize"
+        android:ems            = "10"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/btFind"
+        android:layout_width="61dp"
+        android:layout_height="33dp"
+        android:text="Find"
+        android:textSize="10sp" />
+</LinearLayout>

@@ -156,7 +156,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id= "@+id/btn_find_customers"
+                android:id= "@+id/btn_find_customer"
                 android:layout_width="47dp"
                 android:layout_height="32dp"
                 android:text="FIND"

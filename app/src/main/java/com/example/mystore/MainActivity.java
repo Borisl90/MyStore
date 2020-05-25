@@ -3,6 +3,7 @@ package com.example.mystore;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,13 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     DatabaseHelper myDb;
     EditText editFirstName, editLastName, editAvg,editAddress,editTextId;
     Button btnAddData;
     Button btnviewAll;
     Button btnDelete;
     Button btnviewUpdate;
+    Button btnFindCustomer;
+    Button btnAvg;
     Customer temp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +39,47 @@ public class MainActivity extends AppCompatActivity {
         btnviewAll = (Button)findViewById(R.id.btn_view);
         btnviewUpdate= (Button)findViewById(R.id.btn_uppdate);
         btnDelete= (Button)findViewById(R.id.btn_delete);
+        btnFindCustomer= (Button)findViewById(R.id.btn_find_customer);
+        btnAvg= (Button)findViewById(R.id.btn_avg);
+
+        btnFindCustomer = findViewById(R.id.btn_find_customer);
+        btnFindCustomer.setOnClickListener(this);
+        btnAvg = findViewById(R.id.btn_avg);
+        btnAvg.setOnClickListener(this);
     }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onClick(View v)
+    {
+        if(v ==  btnFindCustomer)
+        {
+            Intent intent = new Intent(this, FindCustomers.class);
+            startActivity(intent);
+        }
+        else if(v == btnAvg)
+        {
+            Intent intent = new Intent(this, AvgShopping.class);
+            startActivity(intent);
+        }
+    }
+
 
 
     public void add(View view) {
         try {
+
+            if(!ValidateFields())
+                return;
+
+            String strFirstName = editFirstName.getText().toString();
+            String strLastName = editLastName.getText().toString();
+            Cursor res = myDb.getSameCustomer(strFirstName, strLastName);
+            if(res.getCount() != 0) {
+                showMessage("Error","לקוח זה קיים במערכת, לא ניתן להוסיף עוד פעם");
+                return;
+            }
+
             temp = new Customer(editFirstName.getText().toString(), editLastName.getText().toString(), editAddress.getText().toString(), Integer.parseInt(editAvg.getText().toString()));
 
             boolean isInserted = myDb.insertData(temp);
@@ -87,72 +126,57 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void checkname(View view)
+    private Boolean ValidateFields()
     {
-        final EditText taskEditText = new EditText(this);
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Insert Name")
-                .setMessage("Insert name To check substrings!")
-                .setView(taskEditText)
-                .setPositiveButton("Check", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Cursor res = myDb.getAllData();
-                        if(res.getCount() == 0) {
-                            // show message
-                            showMessage("Error","Nothing found");
-                            return;
-                        }
-                        StringBuffer buffer = new StringBuffer();
-                        while (res.moveToNext()) {
-                            if(res.getString(1).toLowerCase().contains(taskEditText.getText().toString().toLowerCase())) {
-                                buffer.append("Id :" + res.getString(0) + "\n");
-                                buffer.append("Name :" + res.getString(1) + "\n");
-                                buffer.append("Surname :" + res.getString(2) + "\n");
-                                buffer.append("City :" + res.getString(3) + "\n");
-                                buffer.append("Avg :" + res.getString(4) + "\n\n");
-                            }
-                        }
-                        showMessage("Check Name "+taskEditText.getText()+" Result",buffer.toString());
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .create();
-        dialog.show();
+        Boolean bOk = false;
+
+        String strFirstName = editFirstName.getText().toString();
+        String strLastName = editLastName.getText().toString();
+        String strAddress = editAddress.getText().toString();
+        String strAvg = editAvg.getText().toString();
+        if((strFirstName.isEmpty() || strLastName.isEmpty() || strAddress.isEmpty() || strAvg.isEmpty()))
+        {
+            try {
+                throw new Exception("נא למלא את כל השדות (שם פרטי, שם משפחה, עיר, ממוצע וקניות)");
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                return bOk;
+            }
+        }
+
+        if(strFirstName.matches(".*\\d.*") || strLastName.matches(".*\\d.*"))
+        {
+            try {
+                throw new Exception("נא למלא קלט תקין, רק אותיות בשם פרטי ובשם משפחה");
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                return bOk;
+            }
+        }
+        if(strAddress.matches(".*\\d.*"))
+        {
+            try {
+                throw new Exception("נא למלא קלט תקין, רק אותיות בכתובת - שם היישוב בלבד");
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                return bOk;
+            }
+        }
+        if(!strAvg.matches(".*\\d.*"))
+        {
+            try {
+                throw new Exception("נא למלא קלט תקין, רק ספרות בממוצע קניות");
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                return bOk;
+            }
+        }
+        bOk = true;
+        return  bOk;
+
     }
 
-    public void checkavg(View view)
-    {
-        final EditText taskEditText = new EditText(this);
-        taskEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Insert Avg")
-                .setMessage("Insert avg to check sorting!")
-                .setView(taskEditText)
-                .setPositiveButton("Check", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Cursor res = myDb.getAVG(Integer.parseInt(taskEditText.getText().toString()));
-                        if(res.getCount() == 0) {
-                            // show message
-                            showMessage("Error","Nothing found");
-                            return;
-                        }
-                        StringBuffer buffer = new StringBuffer();
-                        while (res.moveToNext()) {
-                            buffer.append("Id :" + res.getString(0) + "\n");
-                            buffer.append("Name :" + res.getString(1) + "\n");
-                            buffer.append("Surname :" + res.getString(2) + "\n");
-                            buffer.append("City :" + res.getString(3) + "\n");
-                            buffer.append("Avg :" + res.getString(4) + "\n\n");
-                        }
-                        showMessage("Check AVG "+taskEditText.getText().toString(),buffer.toString());
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .create();
-        dialog.show();
-    }
+
     public void showMessage(String title,String Message){
         AlertDialog.Builder builder = new
                 AlertDialog.Builder(this);
@@ -161,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setMessage(Message);
         builder.show();
     }
+
     public void update(View view) {
         temp=new Customer(editFirstName.getText().toString(),editLastName.getText().toString(),editAddress.getText().toString(),Integer.parseInt(editAvg.getText().toString()));
         boolean isUpdate = myDb.updateData(editTextId.getText().toString(),temp);
@@ -171,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,
                     "Data not Updated",Toast.LENGTH_LONG).show();
     }
+
     public void delete(View view) {
         Integer deletedRows =
                 myDb.deleteData(editTextId.getText().toString());

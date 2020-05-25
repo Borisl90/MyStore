@@ -45,10 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
             contentValues.put(COL_5, customer.getAvg());
             long result = db.insert(TABLE_NAME,
                     null, contentValues);
-            if (result == -1)
-                return false; // fail !
-            else
-                return true; // success !
+            // success !
+            return result != -1; // fail !
         }
         else
             return false;
@@ -71,13 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
                 null);
     }
 
-    public Cursor getAVG(int avg){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery(
-                "select * from "+TABLE_NAME+" where AVG <="+avg + " ORDER BY AVG DESC",
-                null);
-        return res;
-    }
+
     public boolean updateData(String id,Customer customer)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -98,4 +90,29 @@ public class DatabaseHelper extends SQLiteOpenHelper
         return db.delete(TABLE_NAME,
                 "ID = ?",new String[] {id});
     }
+
+    public Cursor getLikeName(String strName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery(
+                "select * from " + TABLE_NAME + " where " + COL_2 + " LIKE '%" + strName + "%' " +
+                        "OR " + COL_3 + " LIKE '%" + strName + "%'",
+                null);
+    }
+
+    public Cursor getMaxAvg(String strMinAvg) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery(
+                "select * from " + TABLE_NAME + " where " + COL_5 + " <= '" + strMinAvg + "'"
+                        + " ORDER BY AVG DESC",
+                null);
+    }
+
+    public Cursor getSameCustomer(String strFirstNmae, String strLastName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery(
+                "select * from " + TABLE_NAME + " where " + COL_2 + "='" + strFirstNmae + "'" +
+                        "AND " + COL_3 + " = '" + strLastName + "'",
+                null);
+    }
+
 }
