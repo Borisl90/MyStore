@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     DatabaseHelper myDb;
     EditText editFirstName, editLastName, editAvg,editAddress,editTextId;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
                 return bOk;
             }
+
         }
 
         if(strFirstName.matches(".*\\d.*") || strLastName.matches(".*\\d.*"))

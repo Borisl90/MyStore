@@ -3,22 +3,22 @@ package com.example.mystore;
 public class Customer {
     private String strFirstName;
     private String strLastName;
-    private String city;
+    private String strAddress;
     private int avg;
     private int customerId;
 
-    public Customer(int customerId, String strFirstName, String strLastName, String city, int avg) {
+    public Customer(int customerId, String strFirstName, String strLastName, String strAddress, int avg) {
         this.strFirstName = strFirstName;
         this.strLastName = strLastName;
-        this.city = city;
+        this.strAddress = strAddress;
         this.avg = avg;
         this.customerId = customerId;
     }
 
-    public Customer(String strFirstName, String strLastName, String city, int avg) {
+    public Customer(String strFirstName, String strLastName, String strAddress, int avg) {
         this.strFirstName = strFirstName;
         this.strLastName = strLastName;
-        this.city = city;
+        this.strAddress = strAddress;
         this.avg = avg;
         this.customerId = 0;
     }
@@ -40,11 +40,11 @@ public class Customer {
     }
 
     public String getCity() {
-        return this.city;
+        return this.strAddress;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCity(String strAddress) {
+        this.strAddress = strAddress;
     }
 
     public int getAvg() {
@@ -68,7 +68,7 @@ public class Customer {
         return "Customer{" +
                 "First Name:'" + strFirstName + '\'' +
                 ", Last Name:'" + strLastName + '\'' +
-                ", city:" + city +
+                ", Address:" + strAddress +
                 ", avg:" + avg +
                 ", customerID:" + customerId +
                 '}';
