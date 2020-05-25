@@ -42,10 +42,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnFindCustomer= (Button)findViewById(R.id.btn_find_customer);
         btnAvg= (Button)findViewById(R.id.btn_avg);
 
+
         btnFindCustomer = findViewById(R.id.btn_find_customer);
         btnFindCustomer.setOnClickListener(this);
         btnAvg = findViewById(R.id.btn_avg);
         btnAvg.setOnClickListener(this);
+        btnviewUpdate = findViewById(R.id.btn_uppdate);
+        btnviewUpdate.setOnClickListener(this);
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -60,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if(v == btnAvg)
         {
             Intent intent = new Intent(this, AvgShopping.class);
+            startActivity(intent);
+        }
+        else if(v == btnviewUpdate)
+        {
+            Intent intent = new Intent(this, UpdateById.class);
             startActivity(intent);
         }
     }
@@ -126,8 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private Boolean ValidateFields()
-    {
+    private Boolean ValidateFields() {
         Boolean bOk = false;
 
         String strFirstName = editFirstName.getText().toString();
@@ -187,6 +195,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void update(View view) {
+
+
+
         temp=new Customer(editFirstName.getText().toString(),editLastName.getText().toString(),editAddress.getText().toString(),Integer.parseInt(editAvg.getText().toString()));
         boolean isUpdate = myDb.updateData(editTextId.getText().toString(),temp);
         if(isUpdate == true)
