@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.zip.CheckedInputStream;
+
 public class UpdateById extends AppCompatActivity implements View.OnClickListener {
     Button btnUpdate;
     EditText etLikeNmae;
@@ -32,14 +34,35 @@ public class UpdateById extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         if(v== btnUpdate)
         {
-            customer=new Customer(editFirstName.getText().toString(),editLastName.getText().toString(),editAddress.getText().toString(),Integer.parseInt(editAvg.getText().toString()));
-            boolean isUpdate = myDb.updateData(editTextId.getText().toString(),customer);
-            if(isUpdate == true)
-                Toast.makeText(UpdateById.this,
-                        "Data Update",Toast.LENGTH_LONG).show();
-            else
-                Toast.makeText(UpdateById.this,
-                        "Data not Updated",Toast.LENGTH_LONG).show();
+            int nId = Integer.parseInt(editTextId.getText().toString());
+            if(CheckId(nId))
+            {
+                customer = new Customer(editFirstName.getText().toString(),editLastName.getText().toString(),editAddress.getText().toString(),Integer.parseInt(editAvg.getText().toString()));
+                boolean isUpdate = myDb.updateData(editTextId.getText().toString(),customer);
+
+                if(isUpdate == true)
+                    Toast.makeText(UpdateById.this,
+                            "Data Update",Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(UpdateById.this,
+                            "Data not Updated",Toast.LENGTH_LONG).show();
+            }
+
         }
+
+    }
+
+    private Boolean CheckId(int nId)
+    {
+        Boolean bOk = false;
+        if(!myDb.checkExistId(nId))
+            try {
+                throw new Exception("לא קיים לקוח עם מספר זיהוי כזה במערכת");
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                return bOk;
+            }
+        bOk = true;
+        return bOk;
     }
 }

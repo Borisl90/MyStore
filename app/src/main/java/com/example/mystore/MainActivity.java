@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StringBuffer buffer = new StringBuffer();
         while (res.moveToNext()) {
             buffer.append("Id :"+ res.getString(0)+"\n");
-            buffer.append("Name :"+ res.getString(1)+"\n");
-            buffer.append("Surname :"+ res.getString(2)+"\n");
-            buffer.append("City :"+ res.getString(3)+"\n");
+            buffer.append("First Name :"+ res.getString(1)+"\n");
+            buffer.append("Last Name :"+ res.getString(2)+"\n");
+            buffer.append("Address :"+ res.getString(3)+"\n");
             buffer.append("Avg :"+ res.getString(4)+"\n\n");
 
         }
@@ -189,14 +189,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void delete(View view) {
-        Integer deletedRows =
-                myDb.deleteData(editTextId.getText().toString());
-        if(deletedRows > 0)
-            Toast.makeText(MainActivity.this,
-                    "Data Deleted",Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(MainActivity.this,
-                    "Data not Deleted",Toast.LENGTH_LONG).show();
+
+        int nId = Integer.parseInt(editTextId.getText().toString());
+        if (CheckId(nId))
+        {
+            Integer deletedRows =
+                    myDb.deleteData(editTextId.getText().toString());
+            if(deletedRows > 0)
+                Toast.makeText(MainActivity.this,
+                        "Data Deleted",Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(MainActivity.this,
+                        "Data not Deleted",Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+
+
+
+    private Boolean CheckId(int nId)
+    {
+        Boolean bOk = false;
+        if(!myDb.checkExistId(nId))
+            try {
+                throw new Exception("לא קיים לקוח עם מספר זיהוי כזה במערכת");
+            } catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+                return bOk;
+            }
+        bOk = true;
+        return bOk;
     }
 
 }

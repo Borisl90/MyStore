@@ -62,6 +62,15 @@ public class DatabaseHelper extends SQLiteOpenHelper
         else return false;
     }
 
+    public boolean checkExistId(int nId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery(
+                "select * from "+TABLE_NAME+ " where ID="+"'"+nId+"'",
+                null);
+        return res.getCount() > 0;
+    }
+
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery(

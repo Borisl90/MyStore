@@ -34,7 +34,7 @@ public class FindCustomers extends AppCompatActivity implements View.OnClickList
             String strNmae = etLikeNmae.getText().toString();
             Cursor res = myDb.getLikeName(strNmae);
             if (res.getCount() == 0) {
-                showMessage("Error", "Nothing found");
+                showMessage("Error", "אין התאמה כלל");
                 return;
             }
 
