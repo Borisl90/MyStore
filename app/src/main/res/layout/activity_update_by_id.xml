@@ -111,11 +111,10 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_uppdate"
+                android:id="@+id/btn_update"
                 android:layout_width="62dp"
                 android:layout_height="32dp"
                 android:layout_weight="1"
-                android:onClick="update"
                 android:text="UPDATE"
                 android:textSize="10sp"/>
 

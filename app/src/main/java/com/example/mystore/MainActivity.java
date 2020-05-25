@@ -2,13 +2,10 @@ package com.example.mystore;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,33 +20,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnviewUpdate;
     Button btnFindCustomer;
     Button btnAvg;
-    Customer temp;
+    Customer customer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myDb = new DatabaseHelper(this);
         // capture
-        editFirstName = (EditText)findViewById(R.id.et_first_name);
-        editLastName = (EditText)findViewById(R.id.et_last_name);
-        editAvg = (EditText)findViewById(R.id.et_avg_shopping);
-        editTextId = (EditText)findViewById(R.id.et_national_id);
-        editAddress = (EditText)findViewById(R.id.et_address);
-        btnAddData = (Button)findViewById(R.id.btn_add);
-        btnviewAll = (Button)findViewById(R.id.btn_view);
-        btnviewUpdate= (Button)findViewById(R.id.btn_uppdate);
-        btnDelete= (Button)findViewById(R.id.btn_delete);
-        btnFindCustomer= (Button)findViewById(R.id.btn_find_customer);
-        btnAvg= (Button)findViewById(R.id.btn_avg);
-
-
+        editFirstName   = (EditText)findViewById(R.id.et_first_name);
+        editLastName    = (EditText)findViewById(R.id.et_last_name);
+        editAvg         = (EditText)findViewById(R.id.et_avg_shopping);
+        editTextId      = (EditText)findViewById(R.id.et_national_id);
+        editAddress     = (EditText)findViewById(R.id.et_address);
+        btnAddData      = (Button)findViewById(R.id.btn_add);
+        btnviewAll      = (Button)findViewById(R.id.btn_view);
+        btnviewUpdate   = (Button)findViewById(R.id.btn_uppdate);
+        btnDelete       = (Button)findViewById(R.id.btn_delete);
+        btnFindCustomer = (Button)findViewById(R.id.btn_find_customer);
+        btnAvg          = (Button)findViewById(R.id.btn_avg);
         btnFindCustomer = findViewById(R.id.btn_find_customer);
         btnFindCustomer.setOnClickListener(this);
         btnAvg = findViewById(R.id.btn_avg);
         btnAvg.setOnClickListener(this);
         btnviewUpdate = findViewById(R.id.btn_uppdate);
         btnviewUpdate.setOnClickListener(this);
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -73,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-
     public void add(View view) {
         try {
 
@@ -89,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
 
-            temp = new Customer(editFirstName.getText().toString(), editLastName.getText().toString(), editAddress.getText().toString(), Integer.parseInt(editAvg.getText().toString()));
+            customer = new Customer(editFirstName.getText().toString(), editLastName.getText().toString(), editAddress.getText().toString(), Integer.parseInt(editAvg.getText().toString()));
 
-            boolean isInserted = myDb.insertData(temp);
+            boolean isInserted = myDb.insertData(customer);
             if (isInserted == true)
                 Toast.makeText(MainActivity.this,
                         "Data Inserted", Toast.LENGTH_LONG).show();
@@ -184,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     public void showMessage(String title,String Message){
         AlertDialog.Builder builder = new
                 AlertDialog.Builder(this);
@@ -194,19 +185,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.show();
     }
 
-    public void update(View view) {
-
-
-
-        temp=new Customer(editFirstName.getText().toString(),editLastName.getText().toString(),editAddress.getText().toString(),Integer.parseInt(editAvg.getText().toString()));
-        boolean isUpdate = myDb.updateData(editTextId.getText().toString(),temp);
-        if(isUpdate == true)
-            Toast.makeText(MainActivity.this,
-                    "Data Update",Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(MainActivity.this,
-                    "Data not Updated",Toast.LENGTH_LONG).show();
-    }
 
     public void delete(View view) {
         Integer deletedRows =
