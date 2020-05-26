@@ -205,9 +205,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-
-
     private Boolean CheckId(int nId)
     {
         Boolean bOk = false;
